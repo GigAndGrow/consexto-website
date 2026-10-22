@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consexto</title>
+<meta name="description" content="Consexto designs private cinemas, sound and smart living environments where technology, architecture and emotion become one.">
+<meta property="og:title" content="Consexto | Creativity &amp; Technology">
+<meta property="og:description" content="Private cinemas, sound and smart living, seamlessly integrated into everyday living.">
+<meta property="og:image" content="img/hforma.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap">
+<style>
+/* base reset (outside Claude) */
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+/* Layout: full-bleed cinematic bands alternating ink and stone, content on a 1320px measure, uppercase light display type. */
+:root{
+  --ink:#020203; --char:#0c0c0d; --graphite:#161617;
+  --stone:#e5e5e5; --mist:#d4d4d4; --white:#fcfcfc;
+  --mute-d:#a3a3a3; --mute-l:#4f4f52; --body-l:#48484c;
+  --line-d:rgba(252,252,252,.14); --line-l:rgba(2,2,3,.16);
+  --sans:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --measure:1320px;
+  --gutter-l:max(24px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(24px, env(safe-area-inset-right, 0px));
+  --ease:cubic-bezier(.2,.7,.1,1);
+  color-scheme:dark;
+}
+@media (min-width:900px){:root{--gutter-l:max(48px, env(safe-area-inset-left, 0px));--gutter-r:max(48px, env(safe-area-inset-right, 0px))}}
+*{box-sizing:border-box}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+body{margin:0;background:var(--ink);color:var(--white);font-family:var(--sans);font-size:14px;line-height:1.55;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:transparent;transition:background .4s}
+html.scrolled body::before{background:rgba(2,2,3,.58)}
+[id]{scroll-margin-top:84px}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1px solid currentColor;outline-offset:4px}
+.wrap{max-width:calc(var(--measure) + 96px);margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+
+/* type */
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;color:var(--mute-d)}
+.on-light .eyebrow{color:var(--mute-l)}
+.display{font-weight:300;text-transform:uppercase;letter-spacing:.02em;line-height:1.02;margin:0;text-wrap:balance}
+.d1{font-size:clamp(28px,3.4vw,48px);line-height:1.08}
+.d2{font-size:clamp(21px,2.1vw,30px);line-height:1.15;letter-spacing:.03em}
+.d3{font-size:clamp(17px,1.5vw,21px);font-weight:300;letter-spacing:.03em;line-height:1.15}
+.lede{font-size:clamp(14px,1.05vw,16px);line-height:1.52;font-weight:300;max-width:62ch;text-wrap:pretty}
+.body{max-width:58ch;color:#cfcfd1}
+.on-light .body{color:var(--body-l)}
+.link{display:inline-flex;align-items:center;gap:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;min-height:44px}
+.link .ar{width:34px;height:1px;background:currentColor;position:relative;transition:width .5s var(--ease)}
+.link .ar::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+.link:hover .ar{width:52px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 20px;border:1px solid currentColor;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;background:transparent;cursor:pointer;transition:background .35s,color .35s}
+.btn:hover{background:var(--white);color:var(--ink);border-color:var(--white)}
+.on-light .btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.btn.solid{background:transparent;color:inherit;border-color:currentColor}
+.btn.solid:hover{background:var(--white);color:var(--ink);border-color:var(--white)}
+
+/* bands */
+.band{padding-block:clamp(56px,6.5vw,104px)}
+.band.tight{padding-block:clamp(44px,4.5vw,72px)}
+.on-light{background:var(--stone);color:var(--ink)}
+.on-mist{background:var(--mist);color:var(--ink)}
+.on-char{background:var(--char)}
+.on-light p,.on-mist p,.on-light dd,.on-light li{color:var(--body-l)}
+.on-light h1,.on-light h2,.on-light h3,.on-light b,.on-mist h2,.on-mist h3{color:var(--ink)}
+
+/* header */
+.hdr{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;background:rgba(2,2,3,0);border-bottom:1px solid transparent;transition:background .45s var(--ease),border-color .45s,backdrop-filter .45s,-webkit-backdrop-filter .45s}
+.hdr.scrolled,.hdr.menu-open,.hdr:has(.dd.open){background:rgba(2,2,3,.58);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);border-bottom-color:var(--line-d)}
+.hdr.menu-open,.hdr:has(.dd.open){background:var(--ink)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px}
+.logo{display:inline-flex;align-items:center;min-height:44px;color:var(--white)}
+.wm-h{height:19px;width:108px;display:block}
+.wm-f{height:19px;width:108px;display:block;align-self:flex-start;color:var(--white)}
+.nav{display:flex;align-items:center;gap:6px}
+.nav > a,.nav .dd > button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;background:none;border:0;cursor:pointer;color:var(--mute-d);transition:color .3s}
+.nav > a:hover,.nav .dd > button:hover,.nav .is-current,.nav .dd.open > button{color:var(--white)}
+.nav .dd > button svg{transition:transform .3s}
+.nav .dd.open > button svg{transform:rotate(180deg)}
+.hdr-cta{min-height:40px;padding:0 20px}
+.nav .hdr-mobile-contact{display:none}
+.hdr.menu-open .nav .hdr-mobile-contact{display:inline-flex}
+.burger{display:none;background:none;border:0;min-width:44px;min-height:44px;cursor:pointer;padding:0;align-items:center;justify-content:center}
+.dd{position:static}
+.mega{position:absolute;left:0;right:0;top:100%;background:var(--ink);border-bottom:1px solid var(--line-d);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .35s var(--ease),transform .35s var(--ease),visibility .35s}
+.dd.open .mega{opacity:1;visibility:visible;transform:none}
+.mega .wrap{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:56px;padding-block:44px 52px;height:auto}
+.mega-intro{display:flex;flex-direction:column;gap:18px;padding-right:40px;border-right:1px solid var(--line-d)}
+.mega-intro p{margin:0;font-size:16px;font-weight:300;line-height:1.3;text-transform:uppercase;letter-spacing:.02em}
+.mega-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.mega-items.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px}
+.mitem{display:flex;flex-direction:column;gap:12px}
+.mitem .ph{aspect-ratio:16/10;overflow:hidden;background:var(--graphite)}
+.mitem img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.mitem:hover img{transform:scale(1.05)}
+.mitem b{font-weight:400;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+.mitem span{font-size:13px;color:var(--mute-d)}
+
+@media (max-width:1000px){
+  .nav,.hdr-cta{display:none}
+  .burger{display:inline-flex}
+  .hdr.menu-open .nav{display:flex;flex-direction:column;align-items:stretch;gap:0;position:absolute;left:0;right:0;top:100%;background:var(--ink);border-bottom:1px solid var(--line-d);padding:8px var(--gutter-r) 24px var(--gutter-l);max-height:calc(100dvh - 68px);overflow:auto}
+  .hdr.menu-open .nav > a,.hdr.menu-open .nav .dd > button{justify-content:space-between;width:100%;padding:0;min-height:56px;border-bottom:1px solid var(--line-d);font-size:13px;color:var(--white)}
+  .mega{position:static;opacity:1;visibility:visible;transform:none;display:none;border:0}
+  .dd.open .mega{display:block}
+  .mega .wrap{grid-template-columns:1fr;gap:16px;padding:16px 0 20px}
+  .mega-intro{border:0;padding:0}
+  .mega-intro p{display:none}
+  .mega-items,.mega-items.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* hero */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;animation:drift 18s var(--ease) both}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(2,2,3,.5) 0%,rgba(2,2,3,.32) 38%,rgba(2,2,3,.78) 78%,rgba(2,2,3,.9) 100%),linear-gradient(90deg,rgba(2,2,3,.5) 0%,rgba(2,2,3,.15) 55%,rgba(2,2,3,0) 75%)}
+.hero .display,.hero .lede,.hero .eyebrow{text-shadow:0 2px 28px rgba(2,2,3,.7),0 1px 3px rgba(2,2,3,.4)}
+.hero .wrap{width:100%;padding-block:0 clamp(40px,5vw,72px)}
+.hero-grid{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px}
+.hero-grid > div{min-width:0}
+.hero .lede{max-width:42ch;color:var(--white)}
+.hero-desc{display:block;max-width:30em;text-wrap:pretty}
+@media (max-width:600px){.lg-br{display:none}}
+.hero.center{align-items:center;text-align:center}
+.hero.center .hero-grid{flex-direction:column;align-items:center;justify-content:center}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.hero > img{animation:none}*{transition:none!important;scroll-behavior:auto!important}}
+
+/* statement */
+.statement{text-align:center;display:flex;flex-direction:column;align-items:center;gap:32px}
+.statement p{margin:0;font-size:clamp(16px,1.35vw,19px);line-height:1.52;font-weight:300;max-width:46ch;text-wrap:balance}
+
+/* section head */
+.shead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;margin-bottom:clamp(28px,3vw,48px)}
+.shead > div{display:flex;flex-direction:column;gap:20px;min-width:0}
+
+/* room cards */
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.4vw,20px)}
+.rcard{position:relative;display:block;aspect-ratio:3/4;overflow:hidden;background:var(--graphite);isolation:isolate}
+.rcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.6s var(--ease)}
+.rcard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(2,2,3,.28) 0%,rgba(2,2,3,.12) 35%,rgba(2,2,3,.9) 100%)}
+.rcard:hover img{transform:scale(1.06)}
+.rcard .meta{position:absolute;left:0;right:0;bottom:0;padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;gap:10px}
+.rcard .num{position:absolute;top:clamp(20px,2.4vw,32px);left:clamp(20px,2.4vw,32px);font-size:11px;letter-spacing:.16em;color:var(--mute-d)}
+.rcard h3{margin:0;font-weight:400;font-size:clamp(17px,1.5vw,21px);letter-spacing:.08em;text-transform:uppercase}
+.rcard p{margin:0;color:#d4d4d6;font-size:14px}
+@media (max-width:860px){.rooms{grid-template-columns:1fr}.rcard{aspect-ratio:4/3}}
+
+/* process */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));border-top:1px solid var(--line-d)}
+.on-light .steps,.on-mist .steps{border-color:var(--line-l)}
+.steps li{padding:32px 28px 8px 0;display:flex;flex-direction:column;gap:14px;position:relative}
+.steps li::before{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:50%;background:currentColor}
+.steps .n{font-size:11px;letter-spacing:.16em;color:var(--mute-d)}
+.on-light .steps .n,.on-mist .steps .n{color:var(--mute-l)}
+.steps h3{margin:0;font-size:15px;letter-spacing:.1em;text-transform:uppercase;font-weight:400}
+.steps p{margin:0;font-size:14px;color:var(--mute-d);max-width:30ch}
+.on-light .steps p,.on-mist .steps p{color:var(--mute-l)}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr;row-gap:16px}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* feature tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line-l);margin-bottom:clamp(32px,4vw,56px);overflow-x:auto}
+.tab{background:none;border:0;border-bottom:1px solid transparent;margin-bottom:-1px;min-height:52px;padding:0 22px 0 0;margin-right:18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;color:var(--mute-l);cursor:pointer;white-space:nowrap}
+.tab{position:relative;transition:color .3s;opacity:.8}
+.tab::after{content:"";position:absolute;left:0;right:22px;bottom:-1px;height:2px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.tab:hover{color:var(--ink);opacity:1}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:500;opacity:1}
+.tab[aria-selected="true"]::after{transform:scaleX(1)}
+.fpanel{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:start}
+.fpanel .ph{aspect-ratio:5/4;overflow:hidden;background:var(--mist)}
+.fpanel .ph img{width:100%;height:100%;object-fit:cover}
+.fpanel .txt{display:flex;flex-direction:column;gap:28px}
+.fpanel dl{margin:0;display:flex;flex-direction:column;border-top:1px solid var(--line-l)}
+.fpanel dl > div{padding:22px 0;border-bottom:1px solid var(--line-l);display:flex;flex-direction:column;gap:8px}
+.fpanel dt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute-l)}
+.fpanel dd{margin:0}
+.fpanel .txt .d3{font-size:clamp(20px,1.8vw,26px)}
+.fpanel dd b{display:block;font-weight:400;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+@media (max-width:860px){.fpanel{grid-template-columns:1fr}}
+
+/* split */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(32px,6vw,96px);align-items:center}
+.split .ph{overflow:hidden;background:var(--graphite)}
+.split .ph img{width:100%;height:100%;object-fit:cover}
+.split .txt{display:flex;flex-direction:column;gap:28px;min-width:0}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+/* project list */
+.plist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-d)}
+.plist a{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:24px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line-d);transition:padding .5s var(--ease)}
+.plist a:hover{padding-left:10px}
+.plist img{width:96px;aspect-ratio:4/3;object-fit:cover}
+.plist b{font-weight:400;font-size:16px;letter-spacing:.07em;text-transform:uppercase;display:block}
+.plist span{font-size:13px;color:var(--mute-d)}
+
+/* journal */
+.news{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px)}
+.ncard{display:flex;flex-direction:column;gap:18px}
+.ncard .ph{aspect-ratio:4/3;overflow:hidden;background:var(--stone)}
+.ncard img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.ncard:hover img{transform:scale(1.05)}
+.ncard h3{margin:0;font-weight:400;font-size:17px;letter-spacing:.03em;text-transform:uppercase;line-height:1.35;text-wrap:balance}
+.ncard p{margin:0;font-size:14px;color:var(--mute-l)}
+@media (max-width:860px){.news{grid-template-columns:1fr}}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(160px,18vw,280px);gap:clamp(8px,1vw,14px)}
+.gallery button{padding:0;border:0;background:var(--graphite);overflow:hidden;cursor:zoom-in;position:relative}
+.gallery button img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease),opacity .4s}
+.gallery button:hover img{transform:scale(1.04)}
+.gallery button:first-child{grid-column:span 2;grid-row:span 2}
+.gallery .count{position:absolute;right:14px;bottom:12px;font-size:11px;letter-spacing:.14em;background:rgba(2,2,3,.6);padding:6px 10px}
+@media (max-width:700px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery button:first-child{grid-column:span 2;grid-row:span 1}}
+
+/* accordion */
+.acc{border-top:1px solid var(--line-l)}
+.acc details{border-bottom:1px solid var(--line-l)}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:64px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:400}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary i{font-style:normal;font-size:20px;font-weight:200;transition:transform .35s}
+.acc details[open] summary i{transform:rotate(45deg)}
+.acc .in{padding:0 0 28px;color:var(--body-l);max-width:60ch}
+.dims{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;font-variant-numeric:tabular-nums}
+.dims b{display:block;font-size:30px;font-weight:200;line-height:1}
+.dims span{font-size:11px;letter-spacing:.14em;color:var(--mute-l)}
+
+/* partners */
+.marquee{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 40px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute-d)}
+.pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.4vw,20px)}
+.pcard{display:flex;flex-direction:column;gap:14px}
+.pcard .ph{aspect-ratio:1/1;overflow:hidden;background:var(--graphite)}
+.pcard img{width:100%;height:100%;object-fit:cover}
+.pcard b{font-weight:400;font-size:13px;letter-spacing:.11em;text-transform:uppercase}
+.pcard p{margin:0;font-size:13px;color:var(--mute-d)}
+@media (max-width:860px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* trio */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px)}
+.trio > div{display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid var(--line-d)}
+.on-light .trio > div,.on-mist .trio > div{border-color:var(--line-l)}
+.trio h3{margin:0;font-size:14px;letter-spacing:.11em;text-transform:uppercase;font-weight:400}
+.trio p{margin:0;font-size:14px;color:var(--mute-d)}
+.on-light .trio p,.on-mist .trio p{color:var(--mute-l)}
+@media (max-width:860px){.trio{grid-template-columns:1fr}}
+
+/* enquiry */
+.enq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(40px,6vw,96px)}
+.enq form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 24px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mute-d)}
+.field input,.field textarea,.field select{background:transparent;border:0;border-bottom:1px solid rgba(252,252,252,.3);color:var(--white);font:inherit;font-size:16px;padding:10px 0;min-height:44px;border-radius:0;transition:border-color .3s}
+.field select option{background:var(--ink)}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--white)}
+.field textarea{resize:vertical;min-height:96px}
+.formnote{grid-column:1/-1;margin:0;font-size:14px;color:var(--mute-d)}
+.sent{grid-column:1/-1;border:1px solid var(--line-d);padding:20px 22px;font-size:14px;color:#dcdcde}
+@media (max-width:860px){.enq{grid-template-columns:1fr}}
+@media (max-width:520px){.enq form{grid-template-columns:1fr}}
+
+/* showrooms */
+.shows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
+.shows > div{display:flex;flex-direction:column;gap:12px;padding:28px 0 0;border-top:1px solid var(--line-l)}
+.shows h3{margin:0;font-weight:400;font-size:16px;letter-spacing:.08em;text-transform:uppercase}
+.shows p{margin:0;font-size:14px;color:var(--mute-l)}
+@media (max-width:860px){.shows{grid-template-columns:1fr}}
+
+/* next */
+.next{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-block:clamp(28px,3vw,44px);border-top:1px solid var(--line-d)}
+.next b{font-weight:300;font-size:clamp(20px,2.2vw,30px);letter-spacing:.03em;text-transform:uppercase}
+
+/* footer */
+.ftr{background:var(--ink);border-top:1px solid var(--line-d);padding-block:clamp(56px,6vw,88px) calc(32px + env(safe-area-inset-bottom,0px))}
+.ftr-top{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);padding-bottom:clamp(48px,6vw,80px);border-bottom:1px solid var(--line-d)}
+.ftr-top p{margin:0}
+.nl{display:flex;flex-direction:column;gap:18px}
+.nl form{display:flex;gap:0;border-bottom:1px solid rgba(252,252,252,.3)}
+.nl input{flex:1;min-width:0;background:transparent;border:0;color:var(--white);font:inherit;font-size:16px;min-height:52px}
+.nl input:focus{outline:none}
+.nl button{background:none;border:0;cursor:pointer;font-size:11px;letter-spacing:.16em;text-transform:uppercase;min-height:52px;padding:0 4px}
+.ftr-cols{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px;padding-block:clamp(40px,5vw,64px)}
+.ftr-cols h4{margin:0 0 16px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;color:var(--mute-d)}
+.ftr-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.ftr-cols a:hover{color:var(--mute-d)}
+.ftr-bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;font-size:12px;color:var(--mute-d);letter-spacing:.06em}
+@media (max-width:860px){.ftr-top{grid-template-columns:1fr}.ftr-cols{grid-template-columns:1fr 1fr}}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:80;background:rgba(2,2,3,.96);display:flex;align-items:center;justify-content:center;padding:calc(64px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(64px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lb img{max-height:100%;max-width:100%;object-fit:contain}
+.lb button{position:absolute;background:none;border:0;cursor:pointer;min-width:48px;min-height:48px;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.lb .x{top:calc(12px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px))}
+.lb .pv{left:max(16px,env(safe-area-inset-left,0px));top:50%}
+.lb .nx{right:max(16px,env(safe-area-inset-right,0px));top:50%}
+.lb .ct{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:11px;letter-spacing:.16em;color:var(--mute-d)}
+
+/* view fade */
+#app{animation:fade .6s var(--ease)}
+@keyframes fade{from{opacity:.001}to{opacity:1}}
+.chapter{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden;isolation:isolate}
+.chapter{clip-path:inset(0)}
+.chapter > img{position:fixed;top:0;left:0;width:100%;height:100vh;height:100lvh;object-fit:cover;z-index:-2;pointer-events:none}
+.chapter::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(2,2,3,.88) 0%,rgba(2,2,3,.62) 42%,rgba(2,2,3,.1) 80%)}
+.chapter .wrap{width:100%}
+.chapter-in{max-width:480px;display:flex;flex-direction:column;gap:22px;padding-left:clamp(18px,2vw,28px);border-left:1px solid rgba(252,252,252,.35)}
+.chapter-in p{margin:0;color:#d6d6d8}
+@media (max-width:700px){.chapter::after{background:linear-gradient(180deg,rgba(2,2,3,.45) 0%,rgba(2,2,3,.85) 100%)}.chapter{align-items:flex-end;padding-block:48px}}
+
+/* home hero */
+.hh{align-items:stretch}
+.hh::after{background:radial-gradient(ellipse 60% 45% at 50% 50%,rgba(2,2,3,.55) 0%,rgba(2,2,3,.38) 60%,rgba(2,2,3,.3) 100%),linear-gradient(180deg,rgba(2,2,3,.55) 0%,rgba(2,2,3,.15) 30%,rgba(2,2,3,.2) 62%,rgba(2,2,3,.88) 100%)}
+.hh-slides{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.hh-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1.6s var(--ease),transform 8s linear}
+.hh-slide.on{opacity:1;transform:scale(1)}
+.hh-lb{position:absolute;left:0;right:0;height:50%;background:var(--ink);z-index:2;pointer-events:none;animation:lbopen 1.5s .25s var(--ease) forwards}
+.hh-lb.top{top:0}.hh-lb.bot{bottom:0}
+@keyframes lbopen{to{height:0}}
+.hh-inner{position:relative;width:100%;min-height:100vh;min-height:100svh;display:grid;grid-template-rows:1fr auto}
+.hh .hh-center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding-top:calc(68px + env(safe-area-inset-top,0px))}
+.hh-center .eyebrow{color:var(--white)}
+.hh-title{font-weight:300}
+.hh .hh-center .display,.hh .hh-center .lede,.hh .hh-center .eyebrow{text-shadow:0 2px 28px rgba(2,2,3,.7),0 1px 3px rgba(2,2,3,.4)}
+.hh-x{display:inline-block;font-weight:300;margin:0 .18em;opacity:.75;transform:translateY(-.04em)}
+.hh-lede{margin:0;color:var(--white)}
+.hh-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px}
+.hh .hh-bar{width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding-block:0 clamp(28px,4vw,48px)}
+.hh-rooms{display:grid;grid-template-columns:repeat(4,minmax(0,170px));gap:clamp(16px,2.4vw,36px);flex:1;min-width:0}
+.hh-room{background:none;border:0;padding:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:12px;min-height:44px;color:var(--mute-d);transition:color .3s}
+.hh-room.on,.hh-room:hover{color:var(--white)}
+.hh-meta{display:flex;gap:12px;align-items:baseline;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.hh-n{opacity:.7}
+.hh-prog{display:block;height:1px;background:rgba(252,252,252,.25);overflow:hidden}
+.hh-prog i{display:block;height:100%;background:var(--white);transform:scaleX(0);transform-origin:left}
+.hh-room.on .hh-prog i{animation:prog 6.5s linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.hh-view{white-space:nowrap}
+.hh-room.is-bespoke{position:relative;padding-left:clamp(16px,2.4vw,36px);border-left:1px solid rgba(252,252,252,.25)}
+@media (max-width:700px){.hh-bar{flex-direction:column;align-items:stretch;gap:16px}.hh-rooms{grid-template-columns:repeat(4,minmax(0,1fr))}.hh-view{align-self:flex-start}}
+@media (prefers-reduced-motion:reduce){.hh-lb{display:none}.hh-slide{transition:opacity .01s}.hh-room.on .hh-prog i{animation:none;transform:scaleX(1)}}
+.stack{display:flex;flex-direction:column;gap:28px}
+.center{text-align:center}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wm" viewBox="0 0 171 30"><g transform="translate(0 4.8)"> <path d="M10.5284 24.4773C8.38068 24.4773 6.53125 23.9702 4.98011 22.956C3.42898 21.9418 2.2358 20.5447 1.40057 18.7649C0.565342 16.9851 0.147728 14.9517 0.147728 12.6648C0.147728 10.3381 0.575285 8.2848 1.4304 6.50497C2.29546 4.7152 3.49858 3.31818 5.03977 2.31392C6.59091 1.29972 8.40057 0.792614 10.4688 0.792614C12.0795 0.792614 13.5313 1.09091 14.8239 1.6875C16.1165 2.28409 17.1754 3.11932 18.0007 4.19318C18.826 5.26704 19.3381 6.51989 19.5369 7.9517H16.017C15.7486 6.90767 15.152 5.98295 14.2273 5.17756C13.3125 4.36222 12.0795 3.95454 10.5284 3.95454C9.15625 3.95454 7.95313 4.3125 6.91904 5.02841C5.89489 5.73437 5.09446 6.73366 4.51776 8.02628C3.95099 9.30895 3.66761 10.8153 3.66761 12.5455C3.66761 14.3153 3.94602 15.8565 4.50284 17.169C5.0696 18.4815 5.86506 19.5007 6.88921 20.2266C7.9233 20.9524 9.13636 21.3153 10.5284 21.3153C11.4432 21.3153 12.2734 21.1562 13.0192 20.8381C13.7649 20.5199 14.3963 20.0625 14.9134 19.4659C15.4304 18.8693 15.7983 18.1534 16.017 17.3182H19.5369C19.3381 18.6705 18.8459 19.8885 18.0604 20.9723C17.2848 22.0462 16.2557 22.9013 14.973 23.5376C13.7003 24.1641 12.2188 24.4773 10.5284 24.4773Z" fill="currentColor"/> <path d="M33.9893 24.4773C31.9212 24.4773 30.1065 23.9851 28.5455 23.0007C26.9943 22.0163 25.7812 20.6392 24.9062 18.8693C24.0412 17.0994 23.6087 15.0312 23.6087 12.6648C23.6087 10.2784 24.0412 8.19531 24.9062 6.41548C25.7812 4.63565 26.9943 3.25355 28.5455 2.26918C30.1065 1.2848 31.9212 0.792614 33.9893 0.792614C36.0575 0.792614 37.8672 1.2848 39.4183 2.26918C40.9794 3.25355 42.1925 4.63565 43.0575 6.41548C43.9325 8.19531 44.37 10.2784 44.37 12.6648C44.37 15.0312 43.9325 17.0994 43.0575 18.8693C42.1925 20.6392 40.9794 22.0163 39.4183 23.0007C37.8672 23.9851 36.0575 24.4773 33.9893 24.4773ZM33.9893 21.3153C35.5604 21.3153 36.853 20.9126 37.8672 20.1072C38.8814 19.3018 39.6321 18.2429 40.1193 16.9304C40.6065 15.6179 40.8501 14.196 40.8501 12.6648C40.8501 11.1335 40.6065 9.70668 40.1193 8.38423C39.6321 7.06179 38.8814 5.9929 37.8672 5.17756C36.853 4.36222 35.5604 3.95454 33.9893 3.95454C32.4183 3.95454 31.1257 4.36222 30.1115 5.17756C29.0973 5.9929 28.3466 7.06179 27.8594 8.38423C27.3722 9.70668 27.1286 11.1335 27.1286 12.6648C27.1286 14.196 27.3722 15.6179 27.8594 16.9304C28.3466 18.2429 29.0973 19.3018 30.1115 20.1072C31.1257 20.9126 32.4183 21.3153 33.9893 21.3153Z" fill="currentColor"/> <path d="M53.263 10.2188V24H49.7431V1.09091H53.1436V4.67045H53.4419C53.9789 3.5071 54.7942 2.57244 55.888 1.86648C56.9817 1.15057 58.3936 0.792614 60.1238 0.792614C61.6749 0.792614 63.0321 1.1108 64.1955 1.74716C65.3588 2.37358 66.2637 3.32812 66.91 4.61079C67.5563 5.88352 67.8794 7.49432 67.8794 9.44318V24H64.3596V9.68182C64.3596 7.8821 63.8922 6.48011 62.9576 5.47585C62.0229 4.46165 60.7402 3.95454 59.1096 3.95454C57.986 3.95454 56.9817 4.19815 56.0968 4.68537C55.2218 5.17258 54.5307 5.88352 54.0236 6.81818C53.5165 7.75284 53.263 8.88636 53.263 10.2188Z" fill="currentColor"/> </g><g transform="translate(70 0)"> <path d="M12.6208 16.2534L8.67703 15.3185C7.46492 15.0998 6.29715 14.6818 5.22083 14.0815C4.9332 13.8758 4.70215 13.6004 4.54919 13.281C4.39623 12.9616 4.32634 12.6086 4.34602 12.2548C4.32286 11.7754 4.42597 11.2984 4.645 10.8717C4.86402 10.4449 5.19122 10.0836 5.59369 9.82397C6.69285 9.20196 7.94797 8.91223 9.20765 8.98972C10.5164 8.91848 11.812 9.28252 12.8933 10.0253C13.339 10.3672 13.7066 10.8008 13.9713 11.297C14.236 11.7932 14.3916 12.3405 14.4278 12.9021H18.0131C18.0116 11.8837 17.7874 10.878 17.3563 9.95597C16.9251 9.03395 16.2975 8.21803 15.5177 7.56575C13.7084 6.19261 11.4735 5.50487 9.20765 5.62397C6.99045 5.50311 4.80178 6.17032 3.02665 7.50822C2.27954 8.122 1.68472 8.90137 1.28904 9.78495C0.893347 10.6685 0.707597 11.6322 0.746414 12.6C0.697817 13.3041 0.793637 14.0107 1.02796 14.6761C1.26229 15.3416 1.63015 15.9519 2.10882 16.4692C3.40771 17.5841 4.98383 18.3248 6.66928 18.6123L10.6131 19.5473C11.8395 19.7634 13.0218 20.1814 14.1123 20.7842C14.3998 20.9868 14.631 21.2595 14.7841 21.5766C14.9371 21.8938 15.007 22.2448 14.9871 22.5966C15.0216 23.1496 14.9176 23.7025 14.6847 24.2049C14.4517 24.7073 14.0972 25.1434 13.6534 25.4733C12.4882 26.203 11.1231 26.5453 9.75261 26.4514C8.21263 26.5693 6.67529 26.1914 5.36424 25.3726C4.85269 24.9383 4.43681 24.402 4.14301 23.7978C3.84921 23.1936 3.68393 22.5347 3.65765 21.863H0.000677488C-0.0140404 22.9893 0.211195 24.1057 0.661318 25.1376C1.11144 26.1695 1.77607 27.0931 2.61075 27.8466C4.71852 29.2736 7.24591 29.9428 9.78129 29.7452C12.1344 29.8715 14.4576 29.1694 16.3495 27.7603C17.1434 27.1182 17.7762 26.2984 18.1971 25.3667C18.618 24.4349 18.8153 23.4172 18.7731 22.3952C18.8137 21.675 18.7074 20.9541 18.4608 20.2765C18.2143 19.5989 17.8326 18.9788 17.339 18.4541C15.9865 17.3174 14.3591 16.5583 12.6208 16.2534Z" fill="currentColor"/> <path d="M32.8274 5.69589C31.3494 5.63278 29.8763 5.90528 28.5179 6.49305C27.1596 7.08083 25.9512 7.96871 24.9828 9.09041C22.9478 11.682 21.9277 14.9305 22.1146 18.224C21.9329 21.2954 22.9166 24.322 24.8681 26.6959C25.8315 27.729 27.0084 28.5384 28.3163 29.0676C29.6243 29.5968 31.0317 29.833 32.4402 29.7596C34.7836 29.8609 37.0927 29.1666 38.9941 27.789C40.7784 26.3422 41.9847 24.3002 42.3929 22.0356H38.5782C38.3433 23.304 37.6292 24.4325 36.5848 25.1856C35.4861 26.0126 34.1435 26.4479 32.7701 26.4226C31.8093 26.5035 30.8434 26.348 29.9561 25.9695C29.0689 25.591 28.2872 25.001 27.679 24.2507C26.7009 22.7104 26.1696 20.9274 26.1445 19.1014H42.7084V17.7349C42.8552 14.5956 41.8843 11.5061 39.9693 9.01849C39.1138 7.95107 38.0244 7.09597 36.7857 6.5197C35.547 5.94342 34.1925 5.66151 32.8274 5.69589ZM26.1445 16.0233C26.2556 14.3442 26.8538 12.7343 27.8654 11.3918C28.4344 10.6612 29.1674 10.0758 30.0048 9.6834C30.8422 9.29096 31.7602 9.10256 32.684 9.13356C33.5419 9.07684 34.401 9.2245 35.1911 9.56448C35.9812 9.90446 36.6799 10.4271 37.2301 11.0897C38.2499 12.5313 38.7963 14.2558 38.7933 16.0233H26.1445Z" fill="currentColor"/> <path d="M60.8212 6.3863L55.5724 14.4842L50.3379 6.3863H45.4045L53.034 17.4041L44.9886 29.1411H49.7929L55.3716 20.4678L61.022 29.1411H65.7832L57.8956 17.4616L65.5395 6.3863H60.8212Z" fill="currentColor"/> <path d="M73.7856 0H69.9708V6.40069H65.5394L63.4313 9.50753H70.0138V24.5096C69.8806 25.8641 70.248 27.2206 71.0464 28.3212C71.529 28.736 72.0905 29.048 72.697 29.2384C73.3034 29.4288 73.9421 29.4935 74.5743 29.4288C75.5361 29.3931 76.4943 29.2922 77.4425 29.1267V26.1637H76.0801C75.5063 26.193 74.9382 26.0367 74.4596 25.7178C74.2682 25.5813 74.1132 25.3997 74.0082 25.189C73.9032 24.9784 73.8513 24.745 73.8573 24.5096V9.50753H77.4425V6.40069H73.8573L73.7856 0Z" fill="currentColor"/> <path d="M98.0077 9.0185C97.0272 7.97086 95.8432 7.13587 94.5285 6.56508C93.2138 5.99429 91.7964 5.69981 90.3638 5.69981C88.9313 5.69981 87.5139 5.99429 86.1992 6.56508C84.8845 7.13587 83.7004 7.97086 82.72 9.0185C80.7152 11.4644 79.6925 14.5726 79.8518 17.7349C79.7099 20.8685 80.7319 23.9436 82.72 26.3651C83.7004 27.4127 84.8845 28.2477 86.1992 28.8185C87.5139 29.3893 88.9313 29.6838 90.3638 29.6838C91.7964 29.6838 93.2138 29.3893 94.5285 28.8185C95.8432 28.2477 97.0272 27.4127 98.0077 26.3651C99.9934 23.9422 101.015 20.8682 100.876 17.7349C101.032 14.573 100.01 11.4658 98.0077 9.0185ZM95.1394 24.1069C94.574 24.8412 93.8482 25.4358 93.0178 25.8449C92.1875 26.254 91.2746 26.4668 90.3495 26.4668C89.4244 26.4668 88.5115 26.254 87.6812 25.8449C86.8508 25.4358 86.125 24.8412 85.5596 24.1069C84.2901 22.2395 83.6655 20.0065 83.7813 17.7493C83.6655 15.4877 84.29 13.2501 85.5596 11.3774C86.1234 10.6405 86.8486 10.0436 87.6792 9.63277C88.5097 9.22196 89.4234 9.0083 90.3495 9.0083C91.2756 9.0083 92.1893 9.22196 93.0198 9.63277C93.8504 10.0436 94.5757 10.6405 95.1394 11.3774C96.412 13.2487 97.0367 15.4873 96.9177 17.7493C97.0409 20.0052 96.4211 22.2391 95.1538 24.1069H95.1394Z" fill="currentColor"/> </g></symbol></svg>
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="Consexto, home"><svg class="wm-h" viewBox="0 0 171 30" role="img" aria-label="Consexto"><use href="#wm"/></svg></a>
+    <nav class="nav" id="nav" aria-label="Main" data-lenis-prevent>
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#about" data-nav="about">About</a>
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" data-nav="home-cinema">Home Cinema <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
+        <div class="mega">
+          <div class="wrap">
+            <div class="mega-intro">
+              <span class="eyebrow">Home Cinema</span>
+              <p>A decade of perfection. Designed around you.</p>
+              <a class="link" href="#home-cinema">All rooms <span class="ar"></span></a>
+            </div>
+            <div class="mega-items" id="mega-rooms"></div>
+          </div>
+        </div>
+      </div>
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" data-nav="bespoke">Bespoke <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
+        <div class="mega">
+          <div class="wrap">
+            <div class="mega-intro">
+              <span class="eyebrow">Bespoke</span>
+              <p>Where every room becomes a signature.</p>
+              <a class="link" href="#bespoke">All projects <span class="ar"></span></a>
+            </div>
+            <div class="mega-items two" id="mega-projects"></div>
+          </div>
+        </div>
+      </div>
+      <a href="#contact" class="hdr-mobile-contact" data-nav="contact">Contact us</a>
+    </nav>
+    <a class="btn hdr-cta" href="#contact">Contact us</a>
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M0 1h22M0 7h22M0 13h22"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-top">
+      <div class="stack" style="gap:20px">
+        <svg class="wm-f" viewBox="0 0 171 30" role="img" aria-label="Consexto"><use href="#wm"/></svg>
+        <p class="body">A bold collective, driven by passion. Merging technology, architecture and design to create spaces that feel alive. Every project is a crafted expression, where innovation meets emotion, and luxury meets purpose.</p>
+      </div>
+      <div class="nl">
+        <span class="eyebrow">Subscribe to the newsletter</span>
+        <form id="nlform" novalidate>
+          <label for="nl-email" style="position:absolute;left:-9999px">Email address</label>
+          <input id="nl-email" type="email" placeholder="Email address" autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+        <p id="nlmsg" style="margin:0;font-size:13px;color:var(--mute-d)">By subscribing, you consent to our database and privacy policy.</p>
+      </div>
+    </div>
+    <div class="ftr-cols">
+      <div><h4>Home Cinema</h4><ul><li><a href="#forma">Forma</a></li><li><a href="#axis">Axis</a></li><li><a href="#lumen">Lumen</a></li></ul></div>
+      <div><h4>Bespoke</h4><ul><li><a href="#skyfall">Skyfall</a></li><li><a href="#wine-theatre">Wine Theatre</a></li></ul></div>
+      <div><h4>Studio</h4><ul><li><a href="#about">About us</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div><h4>Showrooms</h4><ul><li>Porto</li><li>Cascais</li><li>Algarve</li></ul></div>
+      <div><h4>Porto Lab</h4><ul><li>Av. da Boavista 3769 L29/30</li><li>4100-139 Porto, Portugal</li><li style="user-select:all">+351 222 022 106</li></ul></div>
+    </div>
+    <div class="ftr-bot"><span>© 2026 Consexto · Creativity &amp; Technology</span><span>Privacy · Cookies · Instagram · LinkedIn</span></div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Gallery">
+  <button class="x" type="button" id="lbx">Close</button>
+  <button class="pv" type="button" id="lbp" aria-label="Previous image"><svg width="18" height="32" viewBox="0 0 18 32" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M17 1L2 16l15 15"/></svg></button>
+  <img id="lbi" alt="">
+  <button class="nx" type="button" id="lbn" aria-label="Next image"><svg width="18" height="32" viewBox="0 0 18 32" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l15 15L1 31"/></svg></button>
+  <div class="ct" id="lbc"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const I = n => `img/${n}.jpg`;
+const PHONE = '+351 222 022 106';
+
+const ROOMS = {
+  forma:{name:'Forma',num:'01',tag:'Defined by geometry. Balanced by design.',img:'forma',gallery:['forma','forma3','forma2','forma4','detail'],
+    philosophy:'Light, space and clarity define every decision. Soft transitions and integrated light create a calm and effortless atmosphere. Every surface, proportion and detail works in harmony, creating a seamless experience where technology quietly disappears.',
+    f1:{label:'Design',title:'Precision in form',text:'Every proportion is carefully considered. Geometry, materiality and alignment create an architecture that feels clean, refined and quietly confident. Simplicity becomes the expression of precision.',img:'forma2'},
+    f2:{label:'Calm experience',title:'Where balance becomes experience',text:'The room disappears into the experience. Light, acoustics and carefully composed surfaces work together to create an atmosphere that feels calm, immersive and effortlessly comfortable from the moment the film begins.',img:'forma3'}},
+  axis:{name:'Axis',num:'02',tag:'Where light becomes structure.',img:'axis',gallery:['axis','about','room80','seating','detail'],
+    philosophy:'Every surface, proportion and material is carefully composed to express clarity and balance. The result is a space where geometry becomes architecture, and every detail feels intentional.',
+    f1:{label:'Design',title:'Designed with precision',text:'Every surface, proportion and material is carefully composed to express clarity and balance. Geometry becomes architecture, and every detail feels intentional.',img:'about'},
+    f2:{label:'Calm experience',title:'Experience, in balance',text:'Every line serves a purpose. Geometry, light and sound work together to create an atmosphere of clarity, focus and quiet immersion. Nothing competes for attention.',img:'axis'}},
+  lumen:{name:'Lumen',num:'03',tag:'Light, space and clarity in perfect balance.',img:'lumen',gallery:['lumen','living','multiroom','detail'],
+    philosophy:'Light, space and clarity define every decision. Soft transitions and integrated light create a calm and effortless atmosphere, where technology quietly disappears.',
+    f1:{label:'Design',title:'Clarity in every detail',text:'Light, structure and architecture work as one to create a space defined by clarity and calm. Every element is carefully considered, allowing the room to feel open, balanced and effortlessly refined.',img:'living'},
+    f2:{label:'Calm experience',title:'Integrated balance',text:'Light is part of the architecture. Surfaces, transitions and lighting are designed as one, creating a seamless and continuous space that feels calm, balanced and naturally immersive.',img:'lumen'}}
+};
+
+const PROJECTS = {
+  skyfall:{name:'Skyfall',tag:'Where precision meets immersion.',img:'skyfall',type:'Private cinema',gallery:['skyfall','sky1','sky2','sky3','sky4'],
+    introTitle:'Engineered for immersion',intro:'Every detail is engineered to disappear into the experience. From architectural integration to acoustic precision, lighting and image performance, every decision serves one purpose: creating complete cinematic immersion.',
+    d1:{title:'Performance without compromise',text:'Every component is selected, calibrated and fine-tuned to deliver exceptional picture quality, balanced acoustics and effortless control. Performance remains consistent and precise in every detail.',img:'sky1'},
+    d2:{title:'Precision in every detail',text:'Every material, finish and technical element is considered as part of a single architectural vision. Design and technology exist in harmony, creating an experience that feels timeless and completely immersive.',img:'sky3'}},
+  'wine-theatre':{name:'Wine Theatre',tag:'Where cinema meets ritual.',img:'wine',type:'Cinema & tasting room',gallery:['wine','sky3','sky1','sky4'],
+    introTitle:'Designed around ritual',intro:'Every detail is shaped around the rhythm of gathering. Wine, cinema, lighting and architecture become part of a single experience that feels warm, balanced and intentional.',
+    d1:{title:'Made for shared moments',text:'More than a cinema, Wine Theatre becomes a place for conversation, tasting and connection. Every detail supports experiences that unfold naturally, from intimate evenings to memorable celebrations.',img:'wine'},
+    d2:{title:'Crafted as one experience',text:'Materials, acoustics, lighting and technology are conceived as one architectural composition. The result is a space where technology disappears, leaving only comfort, atmosphere and timeless design.',img:'sky3'}}
+};
+
+const STEPS = [
+  ['Briefing','We begin by understanding the space, defining the foundation for every decision.'],
+  ['Ideation','Ideas become a clear concept where design, technology and experience come together.'],
+  ['Design & engineering','Every element is designed and integrated to ensure precision, performance and coherence.'],
+  ['Execution & delivery','The project comes to life through installation, calibration and final delivery.']
+];
+const BESPOKE_STEPS = [
+  ['Vision & concept','Your space, your habits and your expectations shape the first idea.'],
+  ['Design & architecture','A bespoke design where proportion, material and light are resolved as one.'],
+  ['Engineering & integration','Image, sound and control are engineered into the architecture from the start.'],
+  ['Build & installation','Our own teams build, install and calibrate every element on site.'],
+  ['Aftercare & service','Ongoing support keeps the experience exactly as it was designed.']
+];
+const PRINCIPLES = [
+  ['Architectural precision','Every room begins with proportion, scale and material. Sound and image are built into the architecture, not applied afterwards.'],
+  ['Acoustic artistry','Hidden layers of absorption, diffusion and bass management are calibrated to each project. What you hear is presence, not loudness.'],
+  ['Human-centric design','Lighting, seating, temperature, even how you enter the room, all choreographed to create anticipation and immersion.']
+];
+const PARTNERS = [
+  ['Trinnov','sky1','The benchmark in immersive audio processing and precision room optimisation.'],
+  ['Steinway & Sons','sky2','Uncompromising sound and timeless design from a house of musical craftsmanship.'],
+  ['Poltrona Frau','sky3','Timeless Italian craftsmanship, exceptional comfort and uncompromising quality.'],
+  ['Kaleidescape','sky4','The reference standard for premium cinema playback, image and content quality.']
+];
+const BRANDS = ['Bang & Olufsen','Steinway Lyngdorf','Barco Residential','Sony','Artcoustic','Sonus Faber','Lyngdorf Audio'];
+const NEWS = [
+  ['Inside the room','How we calibrate a private cinema','From the first measurement to the final screening, a look at the work behind the sound.','sky1'],
+  ['Projects','Designing a cinema for living rooms','When the cinema shares the space with everyday life, architecture leads the technology.','living'],
+  ['Studio','Architecture that hides the technology','Why every Consexto room starts with proportion and material, long before equipment.','room80']
+];
+
+const arrow = '<span class="ar"></span>';
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function hero({img,eyebrow,title,lede,cta,center}){
+  return `<section class="hero${center?' center':''}"><img src="${I(img)}" alt="" fetchpriority="high">
+  <div class="wrap"><div class="hero-grid">
+    <div class="stack" style="gap:14px">${eyebrow?`<span class="eyebrow" style="color:var(--white)">${eyebrow}</span>`:''}<h1 class="display d1">${title}</h1></div>
+    ${lede||cta?`<div class="stack" style="gap:14px;${center?'align-items:center':''}">${lede?`<p class="lede" style="margin:0">${lede}</p>`:''}${cta||''}</div>`:''}
+  </div></div></section>`;
+}
+function steps(list,light){
+  return `<ol class="steps" style="--n:${list.length}">${list.map((s,i)=>`<li><span class="n">${String(i+1).padStart(2,'0')}</span><h3>${s[0]}</h3><p>${s[1]}</p></li>`).join('')}</ol>`;
+}
+function enquiry(subject,title){
+  const opts = ['Forma','Axis','Lumen','Bespoke project','Not sure yet'].map(o=>`<option${o===subject?' selected':''}>${o}</option>`).join('');
+  return `<section class="band" id="enquire"><div class="wrap enq">
+    <div class="stack"><span class="eyebrow">Your space. Our signature.</span>
+      <h2 class="display d2">${title}</h2>
+      <p class="body" style="margin:0">Every space is unique. Tell us about yours and we will prepare a first proposal and invite you to experience a room in one of our showrooms.</p>
+      <p style="margin:0;font-size:14px;color:var(--mute-d)">Prefer to talk? <span style="color:var(--white);user-select:all">${PHONE}</span></p>
+    </div>
+    <form class="enqform" novalidate>
+      <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+      <div class="field"><label for="f-int">Interested in</label><select id="f-int" name="interest">${opts}</select></div>
+      <div class="field full"><label for="f-msg">About your space</label><textarea id="f-msg" name="message" rows="3"></textarea></div>
+      <div class="field full" style="flex-direction:row;flex-wrap:wrap;align-items:center;gap:20px"><button class="btn solid" type="submit">Start your project</button></div>
+      <div class="sent" hidden></div>
+    </form>
+  </div></section>`;
+}
+function partnersBand(){
+  return `<section class="band on-char"><div class="wrap">
+    <div class="shead"><div><span class="eyebrow">Partners in perfection</span><h2 class="display d2">World-leading brands</h2></div>
+    <p class="body" style="margin:0;max-width:44ch">We partner with brands known for craftsmanship, innovation and design.</p></div>
+    <div class="pgrid">${PARTNERS.map(p=>`<div class="pcard"><div class="ph"><img src="${I(p[1])}" alt="${p[0]}" loading="lazy"></div><b>${p[0]}</b><p>${p[2]}</p></div>`).join('')}</div>
+  </div></section>`;
+}
+function galleryBlock(list){
+  return `<div class="gallery" data-gallery="${list.join(',')}">${list.slice(0,5).map((g,i)=>`<button type="button" data-i="${i}" aria-label="Open image ${i+1} of ${list.length}"><img src="${I(g)}" alt="" loading="lazy">${i===4&&list.length>5?`<span class="count">+${list.length-5}</span>`:''}</button>`).join('')}</div>`;
+}
+
+const VIEWS = {
+home(){
+  return heroHome()
+  + `<section class="band on-light"><div class="wrap statement">
+      <span class="eyebrow">Our vision</span>
+      <p>We design environments where technology, architecture and emotion become one seamless experience. Through cinematic design, integrated systems and bespoke interiors, we create spaces that elevate the way you live, feel and connect.</p>
+      <a class="link" href="#about">About Consexto ${arrow}</a>
+    </div></section>`
+  + `<section class="band"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Home Cinema</span><h2 class="display d2">A decade of perfection</h2></div><a class="link" href="#home-cinema">All rooms ${arrow}</a></div>
+      <div class="rooms">${Object.entries(ROOMS).map(([k,r])=>`<a class="rcard" href="#${k}"><img src="${I(r.img)}" alt="${r.name} cinema room" loading="lazy"><span class="num">${r.num}</span><div class="meta"><h3>${r.name}</h3><p>${r.tag}</p><span class="link" style="min-height:32px">Discover ${arrow}</span></div></a>`).join('')}</div>
+    </div></section>`
+  + `<section class="band on-light" id="features"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Features</span><h2 class="display d2">Each room, its own character</h2></div></div>
+      <div class="tabs" role="tablist" aria-label="Rooms">${Object.entries(ROOMS).map(([k,r],i)=>`<button class="tab" role="tab" type="button" id="tab-${k}" aria-controls="panel" aria-selected="${i===0}" data-room="${k}">${r.name}</button>`).join('')}</div>
+      <div id="panel" role="tabpanel">${featurePanel('forma')}</div>
+    </div></section>`
+  + `<section class="band on-char"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">The process</span><h2 class="display d2">From first idea to first screening</h2></div>
+      <p class="body" style="margin:0;max-width:40ch">One team accompanies every project, so nothing is lost between design, engineering and installation.</p></div>
+      ${steps(STEPS)}
+    </div></section>`
+  + `<section class="chapter"><img src="${I('wine')}" alt="" loading="lazy">
+      <div class="wrap"><div class="chapter-in">
+        <span class="eyebrow">Beyond the signature rooms</span>
+        <h2 class="display d2">Looking for something entirely your own?</h2>
+        <p>Forma, Axis and Lumen are our starting points. When a space asks for more, we design it from a blank page: your architecture, your rituals, one room that exists nowhere else.</p>
+        <a class="link" href="#bespoke">Discover bespoke ${arrow}</a>
+      </div></div>
+    </section>`
+  + `<section class="band"><div class="wrap split">
+      <div class="ph" style="aspect-ratio:4/5"><img src="${I('skyfall')}" alt="Skyfall bespoke cinema" loading="lazy"></div>
+      <div class="txt"><span class="eyebrow">Bespoke · Signature</span>
+        <h2 class="display d2">Where every room becomes a signature</h2>
+        <p class="body" style="margin:0">We go beyond predefined concepts. Every space begins with a unique vision, shaped by character, intention and precision. The result is an environment designed exclusively for the way you live.</p>
+        <ul class="plist">${Object.entries(PROJECTS).map(([k,p])=>`<li><a href="#${k}"><img src="${I(p.img)}" alt="" loading="lazy"><div><b>${p.name}</b><span>${p.tag}</span></div><span class="ar" style="width:28px;height:1px;background:currentColor;position:relative"></span></a></li>`).join('')}</ul>
+        <div><a class="btn" href="#bespoke">Explore bespoke</a></div>
+      </div>
+    </div></section>`
+  + `<section class="band on-mist"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Journal</span><h2 class="display d2">Latest news</h2></div><a class="link" href="#home">All articles ${arrow}</a></div>
+      <div class="news">${NEWS.map(n=>`<a class="ncard" href="#home"><div class="ph"><img src="${I(n[3])}" alt="" loading="lazy"></div><span class="eyebrow">${n[0]}</span><h3>${n[1]}</h3><p>${n[2]}</p></a>`).join('')}</div>
+    </div></section>`;
+},
+
+about(){
+  return hero({img:'about',eyebrow:'About us',title:'Technology, made invisible',lede:'Our mission is to integrate timeless design with intelligent technology, creating environments that elevate the way people live.'})
+  + `<section class="band on-light"><div class="wrap split" style="align-items:start">
+      <div class="stack"><span class="eyebrow">Who we are</span><h2 class="display d2">Technology should enhance how we live. Not dominate it.</h2></div>
+      <div class="stack" style="padding-top:clamp(0px,4vw,48px)">
+        <p class="body" style="margin:0">At Consexto, we create harmony between innovation and architecture. Every project begins with understanding how you live and what inspires you, ensuring every detail has purpose.</p>
+        <p class="body" style="margin:0">Image, sound, light and intelligent control are seamlessly integrated to simplify, elevate and enrich everyday living.</p>
+        <p class="body" style="margin:0">The result is technology that disappears into the architecture, leaving only comfort, emotion and spaces that simply feel right.</p>
+      </div>
+    </div></section>`
+  + `<section class="band"><div class="wrap statement">
+      <span class="eyebrow">Our values</span>
+      <p>Design with purpose. Technology with intention. We design technology to disappear, to exist only as comfort, atmosphere and experience.</p>
+    </div></section>`
+  + `<section class="band tight on-char"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Our process</span><h2 class="display d2">How a project unfolds</h2></div></div>
+      ${steps(STEPS)}
+    </div></section>`
+  + `<section class="band"><div class="wrap split">
+      <div class="txt"><span class="eyebrow">Our team</span><h2 class="display d2">Different people. One vision.</h2>
+        <p class="body" style="margin:0">Every extraordinary space begins with the people behind it. Designers, engineers and specialists working together to create seamless experiences where architecture and technology become one.</p>
+        <div style="padding-top:20px;border-top:1px solid var(--line-d);display:flex;flex-direction:column;gap:4px"><b style="font-weight:400;letter-spacing:.14em;text-transform:uppercase">Henrique Pinto</b><span style="font-size:13px;color:var(--mute-d)">CEO</span></div>
+      </div>
+      <div class="ph" style="aspect-ratio:4/3"><img src="${I('room80')}" alt="Consexto team on a project" loading="lazy"></div>
+    </div></section>`
+  + `<section class="band on-light"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Our showrooms</span><h2 class="display d2">Experience it in person</h2></div></div>
+      <div class="shows">
+        <div><h3>Porto Lab</h3><p>A space for exploration, where technology, design and innovation come together.</p><p>Av. da Boavista 3769 L29/30, 4100-139 Porto</p><a class="link" href="#contact">Book a visit ${arrow}</a></div>
+        <div><h3>Cascais</h3><p>Experience our cinema environments in a fully immersive setting, designed to showcase every detail.</p><p>Av. Marginal 8720, Loja 4, 2750-427 Cascais</p><a class="link" href="#contact">Book a visit ${arrow}</a></div>
+        <div><h3>Algarve</h3><p>A refined space for private demonstrations, where comfort, performance and design come together.</p><p>Rua do Comércio 120, 8135-107 Almancil</p><a class="link" href="#contact">Book a visit ${arrow}</a></div>
+      </div>
+    </div></section>`
+  + partnersBand();
+},
+
+'home-cinema'(){
+  return hero({img:'axis',eyebrow:'Home Cinema',title:'A decade of perfection',lede:'Designed around you. Three signature rooms, each shaped by geometry, proportion, texture and light.'})
+  + `<section class="band on-light"><div class="wrap split" style="align-items:start">
+      <div class="stack"><span class="eyebrow">The vision</span><h2 class="display d2">The pursuit of the perfect room</h2></div>
+      <div class="stack" style="padding-top:clamp(0px,4vw,48px)">
+        <p class="body" style="margin:0">For over fifteen years, Consexto has designed and built some of Europe's most refined private cinemas. Along the way, a set of recurring principles emerged: geometry, proportion, texture and light.</p>
+        <p class="body" style="margin:0">These principles shape every cinema we create, balancing performance, aesthetics and the way each client chooses to live.</p>
+      </div>
+    </div></section>`
+  + Object.entries(ROOMS).map(([k,r],i)=>`<section class="band${i%2?' on-char':''}"><div class="wrap split">
+      ${i%2?'':`<a class="ph" href="#${k}" style="aspect-ratio:16/11"><img src="${I(r.img)}" alt="${r.name} cinema room" loading="lazy"></a>`}
+      <div class="txt"><span class="eyebrow">${r.num} / 03</span><h2 class="display d2">${r.name}</h2>
+        <p class="lede" style="margin:0">${r.tag}</p>
+        <p class="body" style="margin:0">${r.philosophy}</p>
+        <div><a class="btn" href="#${k}">Discover ${r.name}</a></div></div>
+      ${i%2?`<a class="ph" href="#${k}" style="aspect-ratio:16/11"><img src="${I(r.img)}" alt="${r.name} cinema room" loading="lazy"></a>`:''}
+    </div></section>`).join('')
+  + `<section class="band on-light"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">The philosophy</span><h2 class="display d2">What every room shares</h2></div></div>
+      <div class="trio">${PRINCIPLES.map(p=>`<div><h3>${p[0]}</h3><p>${p[1]}</p></div>`).join('')}</div>
+    </div></section>`
+  + `<section class="band tight"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">The process</span><h2 class="display d2">From first idea to first screening</h2></div></div>${steps(STEPS)}</div></section>`
+  + enquiry('Not sure yet','Find your signature room');
+},
+
+bespoke(){
+  return hero({img:'skyfall',eyebrow:'Bespoke · Signature',title:'Where every room becomes a signature',lede:'No templates. No repetition. Only environments designed with purpose, precision and individuality.'})
+  + `<section class="band on-light"><div class="wrap split" style="align-items:start">
+      <div class="stack"><span class="eyebrow">What we do</span><h2 class="display d2">Crafted without compromise</h2></div>
+      <div class="stack" style="padding-top:clamp(0px,4vw,48px)">
+        <p class="body" style="margin:0">Every project begins with a vision. Yours. From the first idea to the final detail, every decision is shaped around your space, your lifestyle and your aspirations.</p>
+        <p class="body" style="margin:0">Internationally recognised for design, innovation and craftsmanship, our work continues to redefine the standards of private cinema.</p>
+      </div>
+    </div></section>`
+  + `<section class="band"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">Our bespoke solutions</span><h2 class="display d2">Selected projects</h2></div></div>
+      <div class="rooms" style="grid-template-columns:repeat(2,minmax(0,1fr))">${Object.entries(PROJECTS).map(([k,p])=>`<a class="rcard" href="#${k}" style="aspect-ratio:4/5"><img src="${I(p.img)}" alt="${p.name}" loading="lazy"><span class="num">${p.type}</span><div class="meta"><h3>${p.name}</h3><p>${p.tag}</p><span class="link" style="min-height:32px">View case study ${arrow}</span></div></a>`).join('')}</div>
+    </div></section>`
+  + `<section class="band on-char"><div class="wrap">
+      <div class="shead"><div><span class="eyebrow">The bespoke process</span><h2 class="display d2">Designed once. For you.</h2></div></div>${steps(BESPOKE_STEPS)}</div></section>`
+  + enquiry('Bespoke project','Begin your signature');
+},
+
+contact(){
+  return `<section class="band" style="padding-bottom:0;padding-top:calc(68px + clamp(56px,6.5vw,104px))"><div class="wrap stack" style="gap:24px"><span class="eyebrow">Contact</span><h1 class="display d1">Talk with us</h1></div></section>`
+  + enquiry('Not sure yet','Start your project')
+  + `<section class="band on-light"><div class="wrap"><div class="shows">
+      <div><h3>Porto Lab</h3><p>Av. da Boavista 3769 L29/30</p><p>4100-139 Porto, Portugal</p><p style="user-select:all">${PHONE}</p></div>
+      <div><h3>Cascais</h3><p>Immersive cinema showroom. Visits by appointment.</p></div>
+      <div><h3>Algarve</h3><p>Private demonstrations. Visits by appointment.</p></div>
+    </div></div></section>`;
+}
+};
+
+
+function heroItems(){
+  const HI={forma:'hforma',axis:'haxis',lumen:'hlumen'};
+  return Object.entries(ROOMS).map(([k,r])=>({num:r.num,name:r.name,img:HI[k],href:'#'+k,label:'View '+r.name}))
+    .concat([{num:'04',name:'Bespoke',img:'hskyfall',href:'#bespoke',label:'Discover Bespoke',bespoke:true}]);
+}
+function heroHome(){
+  const items=heroItems();
+  return `<section class="hero hh" aria-label="Introduction">
+    <div class="hh-slides">${items.map((it,i)=>`<img class="hh-slide${i===0?' on':''}" src="img/${it.img}.webp" decoding="async" alt="" ${i?'loading="lazy"':'fetchpriority="high"'}>`).join('')}</div>
+    <div class="hh-lb top" aria-hidden="true"></div><div class="hh-lb bot" aria-hidden="true"></div>
+    <div class="hh-inner">
+      <div class="wrap hh-center">
+        <span class="eyebrow">Consexto</span>
+        <h1 class="display d1 hh-title">Creativity x Technology</h1>
+        <p class="lede hh-lede"><span class="hero-desc">Cinema, sound and technology, seamlessly<br class="lg-br"> integrated into everyday living.</span></p>
+        <div class="hh-cta"><a class="btn" href="#home-cinema" style="min-height:40px;padding:0 20px">Discover our world</a></div>
+      </div>
+      <div class="wrap hh-bar">
+        <div class="hh-rooms" role="tablist" aria-label="Signature rooms and bespoke">${items.map((it,i)=>`<button type="button" class="hh-room${i===0?' on':''}${it.bespoke?' is-bespoke':''}" data-i="${i}" role="tab" aria-selected="${i===0}"><span class="hh-meta"><span class="hh-n">${it.num}</span><span class="hh-name">${it.name}</span></span><span class="hh-prog"><i></i></span></button>`).join('')}</div>
+        <a class="hh-view link" href="${items[0].href}" id="hh-view">${items[0].label} <span class="ar"></span></a>
+      </div>
+    </div>
+  </section>`;
+}
+let hhTimer=null;
+function startHero(){
+  clearInterval(hhTimer);
+  const root=app.querySelector('.hh'); if(!root) return;
+  const items=heroItems();
+  const slides=[...root.querySelectorAll('.hh-slide')], btns=[...root.querySelectorAll('.hh-room')], view=root.querySelector('#hh-view');
+  let i=0;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const go=n=>{i=(n+slides.length)%slides.length;
+    slides.forEach((s,j)=>s.classList.toggle('on',j===i));
+    btns.forEach((b,j)=>{b.classList.remove('on');b.setAttribute('aria-selected',j===i);void b.offsetWidth;if(j===i)b.classList.add('on')});
+    view.href=items[i].href; view.firstChild.textContent=items[i].label+' ';};
+  const restart=()=>{clearInterval(hhTimer); if(!reduce) hhTimer=setInterval(()=>go(i+1),6500)};
+  btns.forEach((b,j)=>b.addEventListener('click',()=>{go(j);restart()}));
+  go(0); restart();
+}
+
+function featurePanel(k){
+  const r = ROOMS[k];
+  return `<div class="fpanel"><div class="ph"><img src="${I(r.f1.img)}" alt="${r.name} interior" loading="lazy"></div>
+    <div class="txt"><h3 class="display d3">${r.name}</h3><p style="margin:0;color:var(--body-l)">${r.tag}</p>
+    <dl><div><dt>${r.f1.label}</dt><dd><b>${r.f1.title}</b>${r.f1.text}</dd></div><div><dt>${r.f2.label}</dt><dd><b>${r.f2.title}</b>${r.f2.text}</dd></div></dl>
+    <div><a class="btn" href="#${k}">Discover ${r.name}</a></div></div></div>`;
+}
+
+function roomView(k){
+  const r = ROOMS[k], keys = Object.keys(ROOMS), nx = keys[(keys.indexOf(k)+1)%keys.length];
+  return hero({img:r.img,eyebrow:`Home Cinema · ${r.num}`,title:r.name,lede:r.tag,cta:'<div style="margin-top:6px"><a class="btn" href="#enquire" style="min-height:40px;padding:0 20px">Enquire</a></div>'})
+  + `<section class="band on-light"><div class="wrap statement"><span class="eyebrow">The design philosophy</span><p>${r.philosophy}</p></div></section>`
+  + `<section class="band tight" id="gallery"><div class="wrap"><div class="shead"><div><span class="eyebrow">Gallery</span><h2 class="display d2">${r.name}, in detail</h2></div></div>${galleryBlock(r.gallery)}</div></section>`
+  + `<section class="band"><div class="wrap stack" style="gap:clamp(48px,5.5vw,80px)">
+      <div class="split"><div class="ph" style="aspect-ratio:5/4"><img src="${I(r.f1.img)}" alt="" loading="lazy"></div>
+        <div class="txt"><span class="eyebrow">${r.f1.label}</span><h2 class="display d2">${r.f1.title}</h2><p class="body" style="margin:0">${r.f1.text}</p></div></div>
+      <div class="split"><div class="txt"><span class="eyebrow">${r.f2.label}</span><h2 class="display d2">${r.f2.title}</h2><p class="body" style="margin:0">${r.f2.text}</p></div>
+        <div class="ph" style="aspect-ratio:5/4"><img src="${I(r.f2.img)}" alt="" loading="lazy"></div></div>
+    </div></section>`
+  + `<section class="band on-light"><div class="wrap split" style="align-items:start">
+      <div class="stack"><span class="eyebrow">Technical data &amp; drawings</span><h2 class="display d2">Everything in the room</h2>
+        <p style="margin:0;color:var(--body-l);max-width:40ch">The full specification and drawings are included in the ${r.name} brochure, prepared for your space.</p>
+        <div><a class="btn" href="#enquire">Request the brochure</a></div></div>
+      <div class="acc">
+        <details open><summary>Screen dimensions <i>+</i></summary><div class="in"><div class="dims"><div><b>165</b><span>WIDTH · CM</span></div><div><b>137</b><span>HEIGHT · CM</span></div><div><b>103</b><span>DEPTH · CM</span></div></div></div></details>
+        <details><summary>Input / Output <i>+</i></summary><div class="in">Connectivity is specified per project and listed in the technical brochure.</div></details>
+        <details><summary>TV system <i>+</i></summary><div class="in">Display and projection options are matched to the room's size and viewing distance.</div></details>
+        <details><summary>Specific features <i>+</i></summary><div class="in">Lighting scenes, acoustic treatment and seating are configured with you during design.</div></details>
+        <details><summary>Operation <i>+</i></summary><div class="in">One interface controls image, sound, light and climate.</div></details>
+      </div>
+    </div></section>`
+  + `<section class="band tight on-char"><div class="wrap"><div class="shead"><div><span class="eyebrow">The process</span><h2 class="display d2">Your ${r.name}, step by step</h2></div></div>${steps(STEPS)}</div></section>`
+  + enquiry(r.name,`Imagine ${r.name} in your home`)
+  + `<div class="wrap"><a class="next" href="#${nx}"><span class="eyebrow">Next room</span><b>${ROOMS[nx].name}</b></a></div>`;
+}
+
+function projectView(k){
+  const p = PROJECTS[k], keys = Object.keys(PROJECTS), nx = keys[(keys.indexOf(k)+1)%keys.length];
+  return hero({img:p.img,eyebrow:`Bespoke · ${p.type}`,title:p.name,lede:p.tag,cta:'<div style="margin-top:6px"><a class="btn" href="#enquire" style="min-height:40px;padding:0 20px">Enquire</a></div>'})
+  + `<section class="band on-light"><div class="wrap split" style="align-items:start">
+      <div class="stack"><span class="eyebrow">The project</span><h2 class="display d2">${p.introTitle}</h2></div>
+      <div class="stack" style="padding-top:clamp(0px,4vw,48px)"><p class="body" style="margin:0">${p.intro}</p></div>
+    </div></section>`
+  + `<section class="band tight" id="gallery"><div class="wrap"><div class="shead"><div><span class="eyebrow">Gallery</span><h2 class="display d2">Inside ${p.name}</h2></div></div>${galleryBlock(p.gallery)}</div></section>`
+  + `<section class="band"><div class="wrap"><div class="shead"><div><span class="eyebrow">Design details</span><h2 class="display d2">Built into the architecture</h2></div></div>
+      <div class="trio">${PRINCIPLES.map(x=>`<div><h3>${x[0]}</h3><p>${x[1]}</p></div>`).join('')}</div></div></section>`
+  + `<section class="band on-char"><div class="wrap stack" style="gap:clamp(48px,5.5vw,80px)">
+      <div class="split"><div class="ph" style="aspect-ratio:5/4"><img src="${I(p.d1.img)}" alt="" loading="lazy"></div>
+        <div class="txt"><span class="eyebrow">Detail 01</span><h2 class="display d2">${p.d1.title}</h2><p class="body" style="margin:0">${p.d1.text}</p></div></div>
+      <div class="split"><div class="txt"><span class="eyebrow">Detail 02</span><h2 class="display d2">${p.d2.title}</h2><p class="body" style="margin:0">${p.d2.text}</p></div>
+        <div class="ph" style="aspect-ratio:5/4"><img src="${I(p.d2.img)}" alt="" loading="lazy"></div></div>
+    </div></section>`
+  + partnersBand()
+  + `<section class="band tight on-light"><div class="wrap"><div class="shead"><div><span class="eyebrow">The process</span><h2 class="display d2">How it came to life</h2></div></div>${steps(BESPOKE_STEPS)}</div></section>`
+  + enquiry('Bespoke project','Begin your signature')
+  + `<div class="wrap"><a class="next" href="#${nx}"><span class="eyebrow">Next project</span><b>${PROJECTS[nx].name}</b></a></div>`;
+}
+
+/* mega menu content */
+document.getElementById('mega-rooms').innerHTML = Object.entries(ROOMS).map(([k,r])=>`<a class="mitem" href="#${k}"><div class="ph"><img src="${I(r.img)}" alt="" loading="lazy"></div><b>${r.name}</b><span>${r.tag}</span></a>`).join('');
+document.getElementById('mega-projects').innerHTML = Object.entries(PROJECTS).map(([k,p])=>`<a class="mitem" href="#${k}"><div class="ph"><img src="${I(p.img)}" alt="" loading="lazy"></div><b>${p.name}</b><span>${p.tag}</span></a>`).join('');
+
+const app = document.getElementById('app'), hdr = document.getElementById('hdr');
+let lenis = null;
+const SECTIONS = new Set(['enquire','gallery','features']);
+let current = null;
+
+function closeMenus(){
+  document.querySelectorAll('[data-dd]').forEach(d=>{d.classList.remove('open');d.querySelector('button').setAttribute('aria-expanded','false')});
+  hdr.classList.remove('menu-open'); document.getElementById('burger').setAttribute('aria-expanded','false');
+}
+function render(){
+  let h = (location.hash||'#home').slice(1) || 'home';
+  if (SECTIONS.has(h) && current){ const el=document.getElementById(h); if(el){ if(lenis) lenis.scrollTo(el,{offset:-84}); else el.scrollIntoView({behavior:'smooth'}); } closeMenus(); return; }
+  let html, nav = h;
+  if (VIEWS[h]) html = VIEWS[h]();
+  else if (ROOMS[h]) { html = roomView(h); nav = 'home-cinema'; }
+  else if (PROJECTS[h]) { html = projectView(h); nav = 'bespoke'; }
+  else { h='home'; html = VIEWS.home(); }
+  current = h;
+  app.style.animation='none'; app.offsetHeight; app.style.animation='';
+  app.innerHTML = html;
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('is-current',a.dataset.nav===nav));
+  const names = {home:'Consexto',about:'About · Consexto','home-cinema':'Home Cinema · Consexto',bespoke:'Bespoke · Consexto',contact:'Contact · Consexto'};
+  document.title = names[h] || ((ROOMS[h]||PROJECTS[h]).name + ' · Consexto');
+  closeMenus(); if(lenis) lenis.scrollTo(0,{immediate:true,force:true}); else window.scrollTo(0,0); bind(); setScrolled(); startHero();
+}
+
+function bind(){
+  app.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+    app.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));
+    document.getElementById('panel').innerHTML = featurePanel(t.dataset.room);
+  }));
+  app.querySelectorAll('[data-gallery]').forEach(g=>{
+    const list = g.dataset.gallery.split(',');
+    g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>openLb(list,+b.dataset.i)));
+  });
+  app.querySelectorAll('.enqform').forEach(f=>f.addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=f.querySelector('#f-name'), email=f.querySelector('#f-email'), out=f.querySelector('.sent');
+    out.hidden=false;
+    if(!name.value.trim()||!/.+@.+\..+/.test(email.value)){ out.textContent='Please add your name and a valid email so we can reply.'; return; }
+    out.textContent=`Thank you, ${name.value.trim()}. This preview is not connected to an inbox yet, so nothing was sent. To reach the team now, call ${PHONE}.`;
+  }));
+}
+
+/* dropdowns */
+document.querySelectorAll('[data-dd]').forEach(d=>{
+  const b=d.querySelector('button');
+  b.addEventListener('click',e=>{e.stopPropagation();const o=!d.classList.contains('open');document.querySelectorAll('[data-dd]').forEach(x=>{x.classList.remove('open');x.querySelector('button').setAttribute('aria-expanded','false')});if(o){d.classList.add('open');b.setAttribute('aria-expanded','true')}});
+  if (matchMedia('(hover:hover) and (min-width:1001px)').matches){
+    let t; d.addEventListener('mouseenter',()=>{clearTimeout(t);document.querySelectorAll('[data-dd]').forEach(x=>x!==d&&x.classList.remove('open'));d.classList.add('open');b.setAttribute('aria-expanded','true')});
+    d.addEventListener('mouseleave',()=>{t=setTimeout(()=>{d.classList.remove('open');b.setAttribute('aria-expanded','false')},180)});
+  }
+});
+document.addEventListener('click',e=>{if(!hdr.contains(e.target)) closeMenus()});
+document.getElementById('burger').addEventListener('click',()=>{const o=!hdr.classList.contains('menu-open');hdr.classList.toggle('menu-open',o);document.getElementById('burger').setAttribute('aria-expanded',o)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenus();closeLb()} if(!lb.hidden){if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)}});
+
+/* lightbox */
+const lb=document.getElementById('lb'), lbi=document.getElementById('lbi'), lbc=document.getElementById('lbc'); let L=[],li=0;
+function openLb(list,i){L=list;li=i;show();lb.hidden=false;if(lenis)lenis.stop();document.getElementById('lbx').focus()}
+function show(){lbi.src=I(L[li]);lbc.textContent=`${li+1} / ${L.length}`}
+function step(d){li=(li+d+L.length)%L.length;show()}
+function closeLb(){lb.hidden=true;if(lenis)lenis.start()}
+document.getElementById('lbx').onclick=closeLb; document.getElementById('lbp').onclick=()=>step(-1); document.getElementById('lbn').onclick=()=>step(1);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
+
+/* newsletter */
+document.getElementById('nlform').addEventListener('submit',e=>{e.preventDefault();const v=document.getElementById('nl-email').value;document.getElementById('nlmsg').textContent=/.+@.+\..+/.test(v)?'Thanks. The newsletter is not connected in this preview yet, so nothing was sent.':'Please enter a valid email address.'});
+
+function setScrolled(){const on=window.scrollY>24;hdr.classList.toggle('scrolled',on);document.documentElement.classList.toggle('scrolled',on)}
+window.addEventListener('scroll',setScrolled,{passive:true});
+window.addEventListener('hashchange',render);
+if (window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  lenis = new Lenis({duration:1.15, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true, wheelMultiplier:1, touchMultiplier:1.4});
+  const raf = t=>{lenis.raf(t);requestAnimationFrame(raf)}; requestAnimationFrame(raf);
+  lenis.on('scroll',setScrolled);
+}
+render();
+</script>
+
+</body>
+</html>
